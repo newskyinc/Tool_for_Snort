@@ -19,3 +19,7 @@ java -jar snort.jar
 3. <a><img src="src/img/3.png" align="center" hspace="8" vspace="4" width="60%"></a>  
 
 4. <a><img src="src/img/4.png" align="center" hspace="8" vspace="4" width="60%"></a> 
+
+### Test Sample:
+
+<a><img src="src/img/test.png" align="center" hspace="8" vspace="4" width="60%"></a>  
