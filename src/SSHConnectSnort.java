@@ -66,7 +66,7 @@ public class SSHConnectSnort	{
 
 		sendCommand("sudo ls");
 		
-		sendCommand("sudp cd /home/logs;"
+		sendCommand("sudo cd /home/logs;"
 				  + "sudo ls -l;"
 						
 //				+ "sudo -i;"	  
