@@ -12,10 +12,10 @@ java -jar snort.jar
 ```
 
 ### How to use:
-1. <img src="src/img/1.png" align="left" hspace="8" vspace="4" width="60%"></a>  
+1. <img src="src/img/1.png" align="center" hspace="8" vspace="4" width="60%"></a>  
 
-2. <img src="src/img/2.png" align="left" hspace="8" vspace="4" width="40%"></a>  
+2. <img src="src/img/2.png" align="center" hspace="8" vspace="4" width="50%"></a>  
 
-3. <img src="src/img/3.png" align="left" hspace="8" vspace="4" width="40%"></a>  
+3. <img src="src/img/3.png" align="center" hspace="8" vspace="4" width="60%"></a>  
 
-4. <img src="src/img/4.png" align="left" hspace="8" vspace="4" width="120%"></a> 
+4. <img src="src/img/4.png" align="center" hspace="8" vspace="4" width="80%"></a> 
