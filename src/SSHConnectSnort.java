@@ -68,11 +68,9 @@ public class SSHConnectSnort	{
 		
 		sendCommand("sudp cd /home/logs;"
 				  + "sudo ls -l;"
-				
-				
+						
 //				+ "sudo -i;"	  
 //				+ "cd ../home/logs"
-
 
 				  + "sudo snort -r " + PCAP_FILE + " -c " + RULE_FILE + ";"
 				  + "sudo ls;");
