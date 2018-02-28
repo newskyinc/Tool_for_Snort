@@ -1,3 +1,19 @@
+---
+## Update 2/28/18  (v3.0)
+- 1. fix cache remaining bug (previous result reserved)
+- 2. better UI
+
+-------------
+### How to run:  
+```js
+java -jar snort_with_rule.jar
+```
+<a><img src="src/img/6.png" align="center" hspace="8" vspace="4" width="60%"></a>  
+<a><img src="src/img/7.png" align="center" hspace="8" vspace="4" width="60%"></a>  
+
+
+
+
 
 
 
