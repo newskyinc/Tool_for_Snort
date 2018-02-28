@@ -34,73 +34,19 @@ public class SSHConnectSnort	{
 	private static ChannelSftp sftpChannel = null;
 	private static String env = "> ubuntu@VPN3:~$ ";
 	private static Boolean hited = false;
-	
-	
 
-	
-	
-	
 	public static String alert = "";
-
-	public static void main(String args[]) throws JSchException, FileNotFoundException {
-
-		init();
-
-		getAlertResult("11", "22", "User/Downlaod");
-		
+	
+	public SSHConnectSnort() {
+		jsch = null;
+		session = null;
+		sftpChannel = null;
+		hited = false;
+		alert = "";
 	}
-
-	public static String getAlertResult(String PCAP_FILE, String RULE_FILE, String Abosult_Path) {
-
-		////////////////////////////////
-		//// step 1: user update pcap //
-		////////////////////////////////
-
-		uploadLocalFile(PCAP_FILE,  "/home/logs", Abosult_Path);		 						//	uploadLocalFile(RULE_FILE,  "/home/logs"); 
-
-
-
-		//////////////////////////////////
-		// step 2: run pcap against rule /
-		//////////////////////////////////
-
-		sendCommand("sudo ls");
-		
-		sendCommand("sudo cd /home/logs;"
-				  + "sudo ls -l;"
-						
-//				+ "sudo -i;"	  
-//				+ "cd ../home/logs"
-
-				  + "sudo snort -r " + PCAP_FILE + " -c " + RULE_FILE + ";"
-				  + "sudo ls;");
-
-		////////////////////////////////////
-		// step 3: server reads alert file /
-		////////////////////////////////////
-
-		sendCommand("file /var/log/snort/alert");
-		readAndDetectRemoteFile("/var/log/snort/alert");
-
-
-		///////////////////////////////////
-		// step 4: user gets final result /
-		///////////////////////////////////
-
-		System.out.println(" --- Alert result --- "
-				+ "\n for " + PCAP_FILE + " against " + RULE_FILE
-				+ ": " + (hited ? "hited" : "not hited"));
-		
-		
-		System.out.println("\n alert str: -----> return \n " + alert);
-		
-		return alert;
-
-	}
+	
 
 	public static void init() {
-
-		
 		System.out.println("---------------------------------------");
 		System.out.println("ssh -Y " + user + "@" + host);
 		System.out.println("password: **************");
@@ -123,7 +69,91 @@ public class SSHConnectSnort	{
 			e.printStackTrace();
 		}
 	}
+	
+	
+	
 
+	
+	
+//	+ "sudo -i;"	  
+//	+ "cd ../home/logs"
+	
+	public static String getAlertResult(String PCAP_FILE, String RULE_FILE,
+									   String Absolute_Path1, String Absolute_Path2) {
+
+		////////////////////////////////
+		//// step 1: upload pcap, rule /
+		////////////////////////////////
+		uploadLocalFile(PCAP_FILE,  "/home/logs", Absolute_Path1);		 						
+		uploadLocalFile(RULE_FILE,  "/home/logs", Absolute_Path2); 
+		
+	
+
+		//////////////////////////////////
+		// step 2: delete prev alert file/
+		//////////////////////////////////
+		sendCommand("cd /var/log/snort/ 	 && 		sudo ls;");
+		sendCommand("cd /var/log/snort/   &&    	sudo rm -rf *;");
+
+		
+
+		//////////////////////////////////
+		// step 3: check [1] alert not exist
+		//               [2] pacp/rule exists 
+		//               [3] run snort
+		//////////////////////////////////
+		
+		System.out.println("=========== [ before snort, alert is ] =========== ");
+		
+		sendCommand("file /var/log/snort/alert");
+		sendCommand("file /home/logs/" + PCAP_FILE);		
+		sendCommand("file /home/logs/" + RULE_FILE);		
+
+		sendCommand("cd /var/log/snort/ 	 &&		sudo ls;");  // check alert
+		System.err.println("[should be none]");
+		
+		sendCommand("cd /home/logs  	  	 && 		sudo ls; " 	 // check PCAP, rule 						 // sudo ls -l
+				  + "sudo snort -r " + PCAP_FILE + " -c " + RULE_FILE + "; "
+				  + "");
+		
+
+		////////////////////////////////////
+		// step 4: after snort, alert read /
+		////////////////////////////////////
+		System.out.println("=========== [ after snort, alert is ] =========== ");
+		sendCommand("cd /var/log/snort/ 	 &&		sudo ls;");
+		System.err.println("[should be alert here]");
+		
+		sendCommand("file /var/log/snort/alert");
+																			//		sendCommand("vim /var/log/snort/alert");
+
+		readAndDetectRemoteFile("/var/log/snort/alert");
+
+
+		///////////////////////////////////
+		// step 5: print hit res by above, return alert /
+		///////////////////////////////////
+		System.err.println(" --- Alert result --- "
+						+ "\n for [" + PCAP_FILE + " against " + RULE_FILE
+						+ "]: " + (hited ? "hited" : "not hited"));
+		
+		
+		System.out.println("\n alert str: -----> return to JPanel \n " + alert);
+		
+		return alert;
+
+	}
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	/* read and detect */
 	private static void readAndDetectRemoteFile(String file) {
 		System.out.println("\n --- read remote SSH file: " + file + " ---");
@@ -135,7 +165,11 @@ public class SSHConnectSnort	{
 			while ((line = br.readLine()) != null) {
 				System.out.println(line);
 				
+				////////////////////////////////
+				
 				alert += (line + "\n");
+				
+				////////////////////////////////
 				
 				if (line.contains("detect")) {
 					hited = true;
@@ -197,11 +231,12 @@ public class SSHConnectSnort	{
 		}	
 	}
 
+	
 	public static String sendCommand(String command) {
 		if (command.toLowerCase().contains("sudo -i")) {
 			env = "> root@VPN3:~# ";
 		}
-		System.out.println("\n --- run command --- ");
+		System.out.println("\n --- run --- ");  				// run command
 		System.out.println(env + command);
 		StringBuilder outputBuffer = new StringBuilder();
 		try {
