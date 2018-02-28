@@ -71,15 +71,7 @@ public class SSHConnectSnort	{
 	}
 	
 	
-	
-
-	
-	
-//	+ "sudo -i;"	  
-//	+ "cd ../home/logs"
-	
-	public static String getAlertResult(String PCAP_FILE, String RULE_FILE,
-									   String Absolute_Path1, String Absolute_Path2) {
+	public static String getAlertResult(String PCAP_FILE, String RULE_FILE, String Absolute_Path1, String Absolute_Path2) {
 
 		////////////////////////////////
 		//// step 1: upload pcap, rule /
@@ -145,15 +137,6 @@ public class SSHConnectSnort	{
 	}
 
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	/* read and detect */
 	private static void readAndDetectRemoteFile(String file) {
 		System.out.println("\n --- read remote SSH file: " + file + " ---");
