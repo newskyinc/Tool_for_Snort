@@ -18,7 +18,7 @@ java -jar snort_with_rule.jar
 
 
 ---
-# Tool  for  Snort
+# Tool  for  Snort (2/22/18) (v1.0)
 -------------
 A toolkit for quick analysis on certain PCAP file. Written in java.
 
