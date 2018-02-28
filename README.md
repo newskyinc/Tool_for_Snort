@@ -13,6 +13,8 @@ java -jar snort_with_rule.jar
 ```
 
 
+
+-------------
 ## Update 2/27/18  (v2.0)
 
 - 1. added rule customized section
