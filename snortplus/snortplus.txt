@@ -1,0 +1,149 @@
+#Rule_version = 1.00
+#Total_rules = 15
+#Last_Change_date = 07.FEB.2018
+
+# Rule - Botnet.QBot.Radiation
+# ID - 1100
+# Family - Qbot 
+# Variant - Radiation
+# $GUI_comment = $Family_comment + $Variant_Comment
+# $Family_comment -QBot is a precursor to Mirai botnet. It is also known as Bashlite/Gafgyt/Remaiten/Torlus. This botnet has previously been responsible for a number of ddos attempts.
+# $Variant_comment - Radiation group has targted CCTVs, and Industrial IoT in the past. They have also used anti-vm tactics and known netgear
+# exploits like nbotloader to attack devices. Please refer NewSky Security blog :
+alert tcp any any -> any any (msg:"Botnet.QBot.Radiation detected !!! ";flow:to_server,established;content:"RADIATION|20 7c 20|VERSION";fast_pattern;sid:1000001)
+
+# Rule - Botnet.QBot.Prometheus
+# ID - 1101
+# Family - Qbot 
+# Variant - Prometheus 
+# $GUI_comment = $Family_comment + $Variant_Comment
+# $Family_comment -QBot is a precursor to Mirai botnet. It is also known as Bashlite/Gafgyt/Remaiten/Torlus. This botnet has previously been responsible for a number of ddos attempts.
+# $Variant_comment - Ever since Prometheus source code has leaked in hacking forums, a number of script kiddies are using it to attack IOT devices.
+# More reference - https://evosec.eu/ru/new-iot-malware-loader-privatgodgg-sh/
+alert tcp any any -> any any (msg:"Botnet.QBot.Prometheus detected !!! ";flow:to_server,established;content:"BUILD PROMETHEUS|3a|";fast_pattern;sid:1000002)
+
+
+# Rule - Botnet.QBot.Razor
+# ID - 1102
+# Family - Qbot 
+# Variant - Razor self rep bot
+# $GUI_comment = $Family_comment + $Variant_Comment
+# $Family_comment -QBot is a precursor to Mirai botnet. It is also known as Bashlite/Gafgyt/Remaiten/Torlus. This botnet has previously been responsible for a number of ddos attempts.
+# $Variant_comment - Razor is a variant of QBOT shared freely on hacking forums. Attacks have often originated from Romania 
+alert tcp any any -> any any (msg:"Botnet.QBot.Razor detected !!! ";flow:to_client,established;content:"FATCOCK";fast_pattern;sid:1102)
+
+
+# Rule - Botnet.Mirai.TR69
+# ID - 1200
+# Family - Mirai
+# Variant - TR 69 SOAP Protocol bug.
+# $GUI_comment = $Family_comment + $Variant_Comment
+# $Family_comment - Mirai is the most prevalent IOT botnet primarily focusing camera and home routers,and has been responsible for various
+# high profile DDOS attacks like on Dyn, OVH and Brian Krebs website.
+# $Variant_comment - The TR69 SOAP arbitary command execution bug effects a variety of IOT devices following this protocol, and has been
+# abused by Mirai botnet to take control of devices.
+alert tcp any any -> any any (msg:"Botnet.Mirai.TR69 detected !!!";pcre:"/\<NewNTPServer1\>\`.*wget .*\.sh\`<\/NewNTPServer1\>/i";sid:1200)
+
+# Rule - Botnet.Mirai.CVE20148361
+# ID - 1201
+# Family - Mirai
+# Variant - CVE-2014-8361 SOAP Exploit.
+# $GUI_comment = $Family_comment + $Variant_Comment
+# $Family_comment - Mirai is the most prevalent IOT botnet primarily focusing camera and home routers,and has been responsible for various
+# high profile DDOS attacks like on Dyn, OVH and Brian Krebs website.
+# $Variant_comment - Mirai variant uses CVE-2014-8361 for arbitary code execution of malicious shellscripts using a crafted NewInternalClient parameter
+alert tcp any any -> any any (msg:"Botnet.Mirai.CVE20148361 detected !!!";pcre:"/\<NewInternalClient\>\`.*wget .*\.sh\`\<\/NewInternalClient\>/i";sid:1201)
+
+# Rule - Mirai.Shinto
+# ID - 1202
+# Family - Mirai 
+# Variant - Shinto password guessing variant 
+# $GUI_comment = $Family_comment + $Variant_Comment
+# $Family_comment - Mirai is the most common IoT botnet which infects IoT to launch DDoS attacks.
+# $Variant_comment - Shinto variant is created by daddyl33t who is being tracked by NewSky
+alert tcp any any -> any any (msg:"Mirai.Shinto detected !!!";pcre:"/bin\/busybox[\s]daddyl33t/i";sid:1202)
+
+# Rule - Botcoin.XMR.1
+# ID - 1300
+# Family - IOT/Linux coinminer
+# Variant - XMR (Monero) miner
+# $GUI_comment = $Family_comment + $Variant_Comment
+# $Family_comment - A number of botminers have sprung up, using IOT CPU to illegally mine coins.
+# $Variant_comment - This particular miner is used to mine XMR/Monero by using an open source mining pool code, XMRMiner.
+alert tcp any any -> any any (msg:"Botminer.Monero detected !!!";content:"agent|22 3a 22|XMRMiner";sid:1300)
+
+# Rule - Satori Botnet DNS Request
+# ID - 1400
+# Family - Satori
+# Variant - Connection to hardcoded Satori C2.
+# $GUI_comment = $Family_comment + $Variant_Comment
+# $Family_comment -  Satori is a known IOT botnet campaign infecting a wide variety of devices.
+# $Variant_comment - When Satori payload runs, it performs a dns request to bigbotpein, which resolves to latest C2 ip.
+# Then this latest IP is connected to port 7645 where the IoT tries to receive commands from the botnet server.
+alert udp any any -> any 53 (msg:"Satori Botnet DNS Request detected !!!";content:"bigbotpein";sid:1400)
+
+# Rule - Satori.ShellAccess
+# ID - 1401
+# Family - Satori Malware
+# Variant - Botnet checking for shell access after attack.
+# $GUI_comment = $Family_comment + $Variant_Comment
+# $Family_comment - Satori is an IoT botnet which attacks a variety of devices via exploits and password guessing methods.
+# $Variant_comment - After attack satori is trying to check whether it got access to the shell.
+alert tcp any any -> any any (msg:"Satori.ShellAccess detected !!!";pcre:"/bin\/busybox[\s]SATORI/i";sid:1401)
+
+# Rule - IOTExploit.Hikvision.ACBypass
+# ID - 2100
+# Family - Hikvision exploit 
+# Variant - N/A
+# $GUI_comment = $Family_comment + $Variant_Comment
+# $Family_comment - Multiple hikvision exploits were fully disclosed which can cause multiple level of breaches on a hikvision user.
+# $Variant_comment - The detection is on POC and in-house replication. Malicious attacks in the wild not observed yet.
+# More reference - https://packetstormsecurity.com/files/144097/hikvisionip-bypass.txt?from=groupmessage&isappinstalled=0
+alert tcp any any -> any any (msg:"IOTExploit.Hikvision.ACBypass detected! ";flow:to_server,established;content:"|3f|auth|3d|YWRtaW46MTEK";fast_pattern;sid:2100)
+
+# Rule - Routex campaign CVE-2016-10176
+# ID - 2101
+# Family - Netgear exploit 
+# Variant - Routex CVE-2016-10176
+# $GUI_comment = $Family_comment + $Variant_Comment
+# $Family_comment - Hacker Links was observed selling weaponized netgear exploit in dark forums.
+# $Variant_comment - The detection is on POC and in-house replication. Malicious attacks in the wild not observed yet.
+# More reference - https://www.cyber.nj.gov/cyber-alerts/20170914/routex-malware-actively-targeting-unpatched-netgear-wnr2000-routers
+alert tcp any any -> any any (msg:"Routex campaign CVE-2016-10176 attack detected";flow:to_server,established;content:"apply_noauth.cgi?";fast_pattern;sid:2101)
+
+# Rule - Exploit.IPCam.CVE20178225
+# ID - 2102
+# Family - IPCam Exploit
+# Variant - CVE-2017-8225
+# $GUI_comment = $Family_comment + $Variant_Comment
+# $Family_comment - CVE-2017-8225 affects a number of IPCameras who use a custom version of GoAhead embedded webserver
+# $Variant_comment - A number of blackhats have changed the POC code to weaponize it by connecting to Shodan, find vulnerable cameras and extract their credentials.
+alert tcp any any -> any any (msg:"Exploit.IPCam.CVE20178825 detected !!!";content:"system.ini|3f|loginuse|26|loginpas";sid:2102)
+
+# Rule - IOTroop.Exploit.VarconNVR
+# ID - 2103
+# Family - Varcon network video recorder exploit
+# Variant - Weaponized by IoTroop/Reaper to steal credentials.
+# $GUI_comment = $Family_comment + $Variant_Comment
+# $Family_comment - A bug in varcon nvr board.cgi leads to arbitary code execution which can lead to credential exposure.
+# $Variant_comment - This bug is already employed by IoTroop/Reaper botnet.
+alert tcp any any -> any any (msg:"IOTroop.Exploit.VarconNVR detected !!!";content:"board|2e|cgi|3f|cmd|3d|cat|25|20|2f|etc|2f|passwd";sid:2103)
+
+# Rule - Satori.Brickerbot.CVE201717215
+# ID - 2104
+# Family - BrickerBot and Satori
+# Variant - CVE-2017-17215 SOAP Exploit.
+# $GUI_comment = $Family_comment + $Variant_Comment
+# $Family_comment - CVE-2017-17215 is a Huawei HG532 Router exploit which can lead to arbitary code execution by code injection in SOAP request.
+# $Variant_comment - The code is already weaponized in Brickerbot and Satori IoT botnets.
+alert tcp any any -> any 37215 (msg:"Satori.Brickerbot.CVE201717215 detected !!!";pcre:"/NewStatusURL\>.*busybox.*\<\/NewStatusURL/i";sid:2104)
+
+# Rule - Exploit.HNAP.PureMasuta
+# ID - 2105
+# Family - PureMasuta
+# Variant - EDB 38722
+# $GUI_comment = $Family_comment + $Variant_Comment
+# $Family_comment - EDB 38722 HNAP exploit can lead to code execution without any authorization in some DLink Routers
+# $Variant_comment - Seen in wild in PureMasuta, Satori and JenX botnets.
+alert tcp any any -> any any (msg:"Exploit.HNAP.PureMasuta detected !!!";pcre:"/purenetworks\.com\/HNAP1\/GetDeviceSettings.*wget/i";sid:2105)
+
