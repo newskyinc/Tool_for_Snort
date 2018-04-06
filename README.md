@@ -4,7 +4,7 @@ Download "snort_v4.jar" file.
 
 ### How to run:  
 ```js
-java -jar snort_with_rule.jar
+java -jar snort_v4.jar
 ```
 
 ### How to test:  
