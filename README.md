@@ -1,3 +1,19 @@
+## Cloud Snort (v4.0) -- 4/6/2018
+
+Download snort_v4.jar file.
+
+```js
+java -jar snort_v4.jar
+```
+
+
+
+
+
+
+
+## [Previous Log] -- Ignore Below.
+
 ## Update 2/28/18  (v3.0)
 - 1. fix cache remaining bug (previous result reserved)
 - 2. better UI
