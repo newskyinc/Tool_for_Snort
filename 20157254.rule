@@ -1,0 +1,9 @@
+# Rule - CVE20157254
+# ID - 2106
+# Family - Unknown / Generic
+# Variant - CVE-2015-7254 Huawei router exploit.
+# $GUI_comment = $Family_comment + $Variant_Comment
+# $Family_comment - CVE-2015-7254 is a Huawei Router exploit which can lead to exposure of snesitive files due to a directory traversal issue.
+# $Variant_comment - The code is already weaponized in Brickerbot and Satori IoT botnets.
+alert tcp any any -> any 37215 (msg:"Huawei.Router.CVE20157254 detected !!!";pcre:"/\/icon\/\.\.\/\.\.\/\.\.\//i";sid:2106)
+
