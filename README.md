@@ -2,8 +2,14 @@
 
 Download "snort_v4.jar" file.
 
+### How to run:  
 ```js
-java -jar snort_v4.jar
+java -jar snort_with_rule.jar
+```
+
+### How to test:  
+```js
+Download "7254.pcap" and "20157254.rule" for test.
 ```
 <a><img src="src/img/final.png" align="center" hspace="8" vspace="4" width="100%"></a>  
 
