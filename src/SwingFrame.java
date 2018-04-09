@@ -6,57 +6,39 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-
 import javax.swing.*;
 import server.ShowMessageDialogWithScrollpane.ShowDialogListener;
 
-//import org.apache.commons.io.FileUtils;
-
 public class SwingFrame extends JFrame {
-
 	private static final long serialVersionUID = 1L;
-	
 	private JFrame frame;
 	private JPanel panel;
-	private JTextField textField, textField2;  							//	private JProgressBar progressBar;
-	
+	private JTextField textField, textField2;
 	private JButton btnBrowse, btnBrowse2;
 	private JButton btnExit;
 	private JButton btnSend;
-
 	private JLabel label0, label1, label2, label3;
-	
 	private String Absolute_Path1 = null;
 	private String Absolute_Path2 = null;
-
 	private String PCAP_FILE = null; 	
 	private String RULE_FILE = "20157254.rule"; 
-	
 	private String alertResult = "[alert result hasn't initialized]";			
 
-	
 	@Override
 	protected void processWindowEvent(WindowEvent e) {
 		super.processWindowEvent(e);
 	}
-	
-
-	// windows mac linux
-	
-	
-	public SwingFrame() throws IOException{
 		
+	public SwingFrame() throws IOException{	
 		Absolute_Path1 = null;
 		Absolute_Path2 = null;
 		PCAP_FILE = null; 	
 		RULE_FILE = "20157254.rule"; 
 		alertResult = "[alert result hasn't initialized]";	
 		prepareGUI();
-		
 	}
 	
 	private void prepareGUI() throws IOException{
-		
 		/**
 		 * < system path different >.
 		 * 1. javac SwingFram.java
@@ -65,19 +47,12 @@ public class SwingFrame extends JFrame {
 		 * 2. java -jar snort.jar 
 		 * 		     Working Directory = 
 		 * 			/Users/aaron
-		 * */
-		
-		// --- 
-		
+		 * */		
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		LocalDate localDate = LocalDate.now();
 		System.out.println("--- last update " + dtf.format(localDate) + " --- \n");
-	
 		frame = new JFrame("[NewSky Security™ Cloud Engine v4.0]" + "  --- last update: " + dtf.format(localDate));
-		
-		
 		frame.setSize(650, 520);  	   // x, y   -   width, height
-
 		frame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent windowEvent){
 				System.exit(0);
@@ -85,79 +60,54 @@ public class SwingFrame extends JFrame {
 		});
 		
 		frame.setIconImage(Toolkit.getDefaultToolkit().getImage("NewSky_Logo_Only_No_Text.png"));
-        frame.setResizable(false);
-
-
-	
-//		panel = new JPanel();
+		frame.setResizable(false);
         
-		panel = new BgPanel(); 						 		// --> BgPanel.java
-        panel.setLayout(new BorderLayout());
-        
-//       panel.add(new LoginPanel(), BorderLayout.CENTER);
-		
-		
-		
+		panel = new BgPanel();
+		panel.setLayout(new BorderLayout());		
 		panel.setBounds(0, 0, 650, 500);  // x, y, w, h	
 		panel.setLayout(null);
 		panel.setVisible(true);
 		
-
-		
 		frame.getContentPane().setLayout(null);
 		frame.getContentPane().add(panel);
 		frame.setVisible(true);  
-		
-		
-		// =======================================================================	
-		// =======================================================================	
 
 		label0 = new JLabel("<html><font color='yellow'><b> PCAP File: </b></font></html>");
 		label0.setVisible(true);
-		label0.setBounds(10, 5, 305, 31);           // (int x, int y, int width, int height) 
+		label0.setBounds(10, 5, 305, 31);           // x, y, w, h
 		label0.setFont(new Font("", Font.PLAIN, 13));
 		panel.add(label0);
 		
-		// --------------------------------------------------------------------
 		textField = new JTextField();
 		textField.setBounds(80, 5, 295, 31);
 		textField.setColumns(100);
 		panel.add(textField);
 
-		// --------------------------------------------------------------------
-				
 		btnBrowse = new JButton("Browse");
 		btnBrowse.setBounds(378, 5, 105, 31);
 		btnBrowse.addActionListener(new ActionListener() {
-			
 			public void actionPerformed(ActionEvent arg0) {
-				
 				JFileChooser filedilg = new JFileChooser();
 				filedilg.showOpenDialog(filedilg);
 				Absolute_Path1 = filedilg.getSelectedFile().getAbsolutePath();
-					
-				
 				textField.setText(Absolute_Path1);
-
 				File file1 = new File(Absolute_Path1);
-				PCAP_FILE = file1.getName();    // <---      
-				
-				
-			    try { Thread.sleep(400); } catch (InterruptedException e1) { e1.printStackTrace(); }
-			    
+				PCAP_FILE = file1.getName();    
+				try { 
+					Thread.sleep(400); 
+				} catch (InterruptedException e1) { 
+					e1.printStackTrace(); 
+				}
 			    
 				if (PCAP_FILE == null || !PCAP_FILE.toLowerCase().contains("cap")) {
 					label2.setText("<html><font color='red'><b>This is NOT a pcap file. Please browse again!<b></font></html>");
 				} else {
 					label2.setText("<html><font color='yellow'><b>[Ready] PCAP file you selected is: " + PCAP_FILE + "</b></font></html>");	
 					label3.setVisible(true);
-					label3.setText("<html><font color='yellow'><b>* [Next] 'Browse' to select another rule file. Or use default rule. Click 'Send' </b></font></html>");
-					
+					label3.setText("<html><font color='yellow'><b>* [Next] 'Browse' to select another rule file. Or use default rule. Click 'Send' </b></font></html>");		
 					// textField2.setText("(default): /remote/20157254.rule");
 					textField2.setText("(please select rule)");
-
 				}
-						
 				System.out.println("\n=========== [ 1. browse PCAP finish ] ================= ");
 				System.out.println("PCAP_FILE selected: " + PCAP_FILE);
 				System.out.println("Absolute Path1: " 		     + Absolute_Path1);
@@ -167,45 +117,30 @@ public class SwingFrame extends JFrame {
 		
 		btnBrowse.setFont(new Font("", Font.PLAIN, 13));
 		panel.add(btnBrowse);
-
 		
-		
-		
-		
-		// =======================================================================
-		// =======================================================================	
 		label1 = new JLabel("<html><font color='yellow'><b> Rule File: </b></font></html>");
 		label1.setVisible(true);
-		label1.setBounds(10, 35, 305, 31);           // (int x, int y, int width, int height) 
+		label1.setBounds(10, 35, 305, 31);          	// x, y, w, h
 		label1.setFont(new Font("", Font.PLAIN, 13));
 		panel.add(label1);
 		
-		// --------------------------------------------------------------------
 		textField2 = new JTextField();
 		textField2.setBounds(80, 35, 295, 31);
 		textField2.setColumns(100);
 		panel.add(textField2);
 
-		// --------------------------------------------------------------------
-
 		btnBrowse2 = new JButton("Browse");
 		btnBrowse2.setBounds(378, 35, 105, 31);
-		btnBrowse2.addActionListener(new ActionListener() {
-			
+		btnBrowse2.addActionListener(new ActionListener() {			
 			public void actionPerformed(ActionEvent arg0) {
-				
 				JFileChooser filedilg = new JFileChooser();
 				filedilg.showOpenDialog(filedilg);
 				Absolute_Path2 = filedilg.getSelectedFile().getAbsolutePath();
-					
-				
 				textField2.setText(Absolute_Path2);
-
 				File file2 = new File(Absolute_Path2);
-				RULE_FILE = file2.getName();    // <---      
+				RULE_FILE = file2.getName();     
 				
-				
-			    try { Thread.sleep(400); } catch (InterruptedException e1) { e1.printStackTrace(); }
+				try { Thread.sleep(400); } catch (InterruptedException e1) { e1.printStackTrace(); }
 			    
 				if (RULE_FILE == null || !RULE_FILE.toLowerCase().contains("rule")) {
 					label2.setText("<html><font color='red'><b>This is NOT a valid rule file. Please browse again!</b></font></html>");
@@ -214,7 +149,7 @@ public class SwingFrame extends JFrame {
 					label3.setVisible(true);
 					label3.setText("<html><font color='yellow'><b>* Final Step: Click 'Send' to see final result. Result will show on the right side. </b></font></html>");
 				}
-						
+				
 				System.out.println("\n=========== [ 2. browse RULE finish ] ================= ");
 				System.out.println("RULE_FILE selected: " + RULE_FILE);
 				System.out.println("Absolute Path2: " 		     + Absolute_Path2);
@@ -224,19 +159,6 @@ public class SwingFrame extends JFrame {
 		
 		btnBrowse2.setFont(new Font("", Font.PLAIN, 13));
 		panel.add(btnBrowse2);
-		
-
-		
-		
-
-		
-		
-		
-		
-		
-		
-		// =======================================================================	
-		// =======================================================================	
 				
 		btnExit = new JButton("Exit");
 		btnExit.setBounds(182, 75, 90, 31);
@@ -248,137 +170,59 @@ public class SwingFrame extends JFrame {
 		});
 		panel.add(btnExit);
 		
-		// =======================================================================	
 		label2 = new JLabel("<html><font color='yellow'><b>* Step 1: Click 'Browse' to select PCAP or CAP file.</b></font></html>");
-		
 		label2.setBackground( new Color(106, 86, 77) );	
 		label2.setOpaque(true);
-		
 		label2.setVisible(true);
-
-		
-		
-		label2.setBounds(10, 128, 330, 31);           // (int x, int y, int width, int height) 
+		label2.setBounds(10, 128, 330, 31);          // x, y, w, h
 		label2.setFont(new Font("", Font.PLAIN, 13));
 		panel.add(label2);
 
-		
-		// =======================================================================
 		label3 = new JLabel(" -- "); //Alert Result:   
 		label3.setVisible(false);
-		label3.setBounds(10, 158, 520, 31);           // (int x, int y, int width, int "height") 
+		label3.setBounds(10, 158, 520, 31);          // x, y, w, h
 		label3.setFont(new Font("", Font.PLAIN, 13));
-		
 		label3.setBackground( new Color(106, 86, 77) );	
 		label3.setOpaque(true);
-		
-		
 		panel.add(label3);
-		
-		
-		// -----------------------------------------------------------------------
-		
-		/**
-		 * Add icon and better discription
-		 * @img_path /Users/aaron/eclipse-workspace/SnortEngine/bin/server 
-		 *  */
-		
-		
 				
-//		ImageIcon image = new ImageIcon(this.getClass().getResource("NewSky_Logo_Only_No_Text.png"));
-//		final JLabel label4 = new JLabel(image);    // pic label
-//		label4.setVisible(true);
-//		label4.setBounds(0, 200, 500, 200); 
-//		panel.add(label4);
-////	    final JLabel label = new JLabel("some label with a nice text");
-//	    label4.setBackground(Color.YELLOW);
-//	    MouseAdapter adapter = new MouseAdapter() {
-//	        /** 
-//	         * @inherited <p>
-//	         */
-//	        @Override
-//	        public void mouseEntered(MouseEvent e) {
-//	            label4.setOpaque(true);
-//	            label4.repaint();
-////	            label0.setOpaque(true);
-////	            label0.repaint();
-//	        }
-//	        /** 
-//	         * @inherited <p>
-//	         */
-//	        @Override
-//	        public void mouseExited(MouseEvent e) {
-//	            label4.setOpaque(false);
-//	            label4.repaint();
-//	            
-////	            label0.setOpaque(false);
-////	            label0.repaint();
-//	        }
-//	    };
-//	    label4.addMouseListener(adapter);
-
-		
-		
-		
-	
-		
-		
-		
-		
-		
-		
 		// ====================== SSH(), * init() * before browser ======================
-		
-		
 		
 		SSHConnectSnort ssh = new SSHConnectSnort();
 		ssh.init();
-		
-		
-		
 		
 		// ============================== * Send * =======================================
 		
 		btnSend = new JButton("Send");  // run
 		btnSend.setBounds(75, 75, 90, 31);
 		btnSend.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
-				// run only when entire below .... finished
-								
+				// run only when entire below. finished
 				if (PCAP_FILE == null || RULE_FILE == null) {
 					label2.setText("INVALID file! Please browse again!");
 					return;
 				} else {
 					label2.setText("<html><font color='yellow'><b>Processing...</b></font></html>");
 					label2.setVisible(true);
-					
 					label3.setText(PCAP_FILE + " against " + RULE_FILE);
 					label3.setVisible(true);
 				}
-
 				label2.setVisible(true);
-				
 				
 				try {
 					java.lang.Thread.sleep(200);
 				} catch (InterruptedException e1) {
 					e1.printStackTrace();
 				}
-				///////////////////////////				
-				//       //
-				///////////////////////////
+
 				// ===================== * getAlertResult() * ==============================
-
-
-				alertResult = ssh.getAlertResult(PCAP_FILE, RULE_FILE, Absolute_Path1, Absolute_Path2);  //
 				
-
+				alertResult = ssh.getAlertResult(PCAP_FILE, RULE_FILE, Absolute_Path1, Absolute_Path2);
+				
 				// ===================== * ================ * ===============================
 
-				///// display alert /////
+				// display alert //
 					
 				label3.setText("<html><font color='yellow'><b>Success! Please see result on right side. If hit, the comments rwill be given.</b></font></html>");
 
@@ -407,9 +251,7 @@ public class SwingFrame extends JFrame {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-					
 					//////////////////////////////////			
-
 				}
 
 				// display the jframe
@@ -417,26 +259,16 @@ public class SwingFrame extends JFrame {
 				frame.setLocationRelativeTo(null);
 				frame.setVisible(true);
 			}});
-
-		panel.add(btnSend);
 		
+		panel.add(btnSend);
 	}
 	
-	
-	
-    public static final boolean windows = System.getProperty("os.name")
+	public static final boolean windows = System.getProperty("os.name")
             .toLowerCase().contains("Windows".toLowerCase());
     
-    public static final boolean mac = System.getProperty("os.name")
+	public static final boolean mac = System.getProperty("os.name")
             .toLowerCase().contains("Mac".toLowerCase());
 	
-	
-	
-	
-	
-	
-
-
 	public static void main(String[] args) throws IOException{
 		
 		System.err.println("Working Directory = \n"  +  System.getProperty("user.dir") + "\n");
@@ -445,11 +277,7 @@ public class SwingFrame extends JFrame {
 		String currentDir = System.getProperty("user.dir");
 		System.out.println("Current dir using System:" +currentDir + "\n");
 		
-		
-//		JOptionPane.showMessageDialog(null, "My Goodness, this is so concise");
-		
-			
-			JOptionPane.showMessageDialog(null,
+		JOptionPane.showMessageDialog(null,
 					
 					"You are running " + (windows ? "WINDOWS" : 
 										(mac? "MAC" : "LINUX/UBUNTU")) + " system: \n"
@@ -460,20 +288,12 @@ public class SwingFrame extends JFrame {
 					
 					"[Action Required] Please do this below before running program!", 
 					1);
-			
-
-		
 		
 		SwingFrame sf = new SwingFrame();      
 	}
 	
 
 }   
-	
-	
-
-
-	
 	
     /*
 	
@@ -527,37 +347,3 @@ public class SwingFrame extends JFrame {
 			"IPV6-ICMP TTL:1 TOS:0x0 ID:256 IpLen:40 DgmLen:76";
 	
 	*/
-
-
-
-
-
-
-// =======================================================================
-//progressBar = new JProgressBar(0, 100);
-//progressBar.setBounds(62, 168, 146, 31);
-//progressBar.setValue(0);
-//progressBar.setBorderPainted(true);
-//
-//
-//
-//
-//progressBar.setStringPainted(true);
-//progressBar.setVisible(true);
-//
-//panel.add(progressBar);
-//
-//
-//for (int i = 0; i <= 100; i++) {
-//    final int currentValue = i;
-//    try {
-//        SwingUtilities.invokeLater(new Runnable() {
-//            public void run() {
-//                progressBar.setValue(currentValue);
-//            }
-//        });
-//        java.lang.Thread.sleep(100);
-//    } catch (InterruptedException e1) {
-//        JOptionPane.showMessageDialog(frame, e1.getMessage());
-//    }
-//}
