@@ -6,11 +6,9 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
-
 import org.omg.CORBA.portable.InputStream;
 
 class BgPanel extends JPanel {
@@ -24,44 +22,30 @@ class BgPanel extends JPanel {
 	 * 			/Users/aaron
 	 * */
 	private static final long serialVersionUID = 1L;
-	
-	
 	public Image bg; 
 	
-	
-	
-	public BgPanel() throws IOException {
-		
+	public BgPanel() throws IOException {	
 		File file = new File("coding_bg_w_logo.jpg");;
-		
 		/**
 		 * jar run will use path /User/aaron/..
 		 * */	
-		
 		String current = new java.io.File( "." ).getCanonicalPath();
 		
 		if (file.exists()) {
 			System.err.println("[1] Read success -- " + current + "/coding_bg_w_logo.jpg");
-			
 		} else {
-			
 			file = new File(current + "/support_file/coding_bg_w_logo.jpg");   // <-----------
 			if (file.exists()) {
 				System.err.println("[2] Read success -- " + current + "/support_file/coding_bg_w_logo.jpg");
 			} 
-			
-			else {
-				
+			else {	
 				String currentDir = System.getProperty("user.dir");
 				file = new File(currentDir + "/support_file/coding_bg_w_logo.jpg");  // <-----------
 				System.err.println("[3] Read -- " + currentDir + "/support_file/coding_bg_w_logo.jpg");
 			}
 		}
-		
 		bg = ImageIO.read(file);   
 	}
-
-
 	
     @Override
     public void paintComponent(Graphics g) {
@@ -75,6 +59,14 @@ class BgPanel extends JPanel {
 
 
 
+
+
+
+
+
+
+
+// ------- logs -------------------
 /* == run from SwingFrame.java. OK
 
 // -- run jar file               from    /external_src
@@ -121,12 +113,7 @@ class BgPanel extends JPanel {
 //     if(is!=null)
 //        is.close();
 //  }
-
-
 // =========================================
-
-
-
 //public Image bg;
 //
 //public BgPanel() throws IOException {
@@ -139,9 +126,7 @@ class BgPanel extends JPanel {
 ////	} catch (MalformedURLException e) {
 ////		e.printStackTrace();
 ////	}
-//	
-//	
-//	
+//		
 //	Image bg = new ImageIcon("coding_bg_w_logo.jpg").getImage();   
 ////	  - local file: /Users/aaron/eclipse-workspace/SnortEngine/coding_bg_w_logo.jpg
 //}
