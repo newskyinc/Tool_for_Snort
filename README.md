@@ -5,10 +5,12 @@ Download "snort_v4.jar" file.
 ### How to run:  
 ```js
 java -jar snort_v4.jar
-```
 
-### Latest rule file can be directly put into a local folder without having to manually modify snort's code or jar file. 
+
+* Latest rule file can be directly put into a local folder without having to manually modify snort's code or jar file. 
 (Info about where the folder is, will pop up when snort is started)
+
+```
 
 ### How to test:  
 ```js
