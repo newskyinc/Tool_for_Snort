@@ -65,8 +65,8 @@ public class SSHConnectSnort	{
 	
 	//	+ "sudo -i;"	  
 	//	+ "cd ../home/logs"
-	public static String getAlertResult(String PCAP_FILE, String RULE_FILE,
-									   String Absolute_Path1, String Absolute_Path2) {
+	public static String getAlertResult(String PCAP_FILE, String RULE_FILE, 
+					    String Absolute_Path1, String Absolute_Path2) {
 		////////////////////////////////
 		//// step 1: upload pcap, rule /
 		////////////////////////////////
@@ -76,8 +76,8 @@ public class SSHConnectSnort	{
 		//////////////////////////////////
 		// step 2: delete prev alert file/
 		//////////////////////////////////
-		sendCommand("cd /var/log/snort/ 	 && 		sudo ls;");
-		sendCommand("cd /var/log/snort/   &&    	sudo rm -rf *;");
+		sendCommand("cd /var/log/snort/ && sudo ls;");
+		sendCommand("cd /var/log/snort/ && sudo rm -rf *;");
 
 		//////////////////////////////////
 		// step 3: check [1] alert not exist
@@ -91,14 +91,13 @@ public class SSHConnectSnort	{
 		sendCommand("file /home/logs/" + PCAP_FILE);		
 		sendCommand("file /home/logs/" + RULE_FILE);		
 
-		sendCommand("cd /var/log/snort/ 	 &&		sudo ls;");  // check alert
+		sendCommand("cd /var/log/snort/ && sudo ls;");  // check alert
 		System.err.println("[should be none]");
 		
-		sendCommand("cd /home/logs  	  	 && 		sudo ls; " 	 // check PCAP, rule 						 // sudo ls -l
+		sendCommand("cd /home/logs && sudo ls; " 	// check PCAP, rule 						 // sudo ls -l
 				  + "sudo snort -r " + PCAP_FILE + " -c " + RULE_FILE + "; "
 				  + "");
-		
-		// cd /home/logs && 		ls 	&& 				snort -r 7254.pcap -c 20157254.rule 
+		// cd /home/logs && ls && snort -r 7254.pcap -c 20157254.rule 
 		// file /home/logs/7254.pcap
 		// file /home/logs/20157254.rule
 		// snort -D -r /home/logs/7254.pcap -c /home/logs/20157254.rule 
@@ -107,11 +106,10 @@ public class SSHConnectSnort	{
 		// step 4: after snort, alert read /
 		////////////////////////////////////
 		System.out.println("=========== [ after snort, alert is ] =========== ");
-		sendCommand("cd /var/log/snort/ 	 &&		sudo ls;");
+		sendCommand("cd /var/log/snort/ && sudo ls;");
 		System.err.println("[should be alert here]");
 		
 		sendCommand("file /var/log/snort/alert");
-		
 		// vim  /var/log/snort/alert
 		//  :wq      :q
 																			//		sendCommand("vim /var/log/snort/alert");
@@ -124,16 +122,13 @@ public class SSHConnectSnort	{
 						+ "\n for [" + PCAP_FILE + " against " + RULE_FILE
 						+ "]: " + (hited ? "hited" : "not hited"));		
 		System.err.println("\n- alert str: -----> return to JPanel \n" + alert);
-		
 		return alert;		
 	}
-
-
+	
 	/* read and detect */
 	private static void readAndDetectRemoteFile(String file) {
 		System.out.println("\n --- read remote SSH file: " + file + " ---");
-		try {
-			
+		try {		
 			ReadRuleDict rd = new ReadRuleDict();
 			rd.initReadMapLocal("snortplus.txt");
 			
@@ -142,22 +137,15 @@ public class SSHConnectSnort	{
 				rd.getCommentByRule("IOTExploit.Hikvision.ACBypass")	
 			);			
 			
-			
 			InputStream out = null;
 			out = sftpChannel.get(file);
 			BufferedReader br = new BufferedReader(new InputStreamReader(out));
-			String line = null;
-						
+			String line = null;			
 			String ruleKey = null;
-
 			while ((line = br.readLine()) != null  &&  ruleKey == null) {
-				
 				System.err.println(line);
-				
 				////////////////////////////////
-				
 				//  alert += (line + "\n");   //
-				
 				////////////////////////////////
 				/**				
 				[**] [1:2106:0] Huawei.Router.CVE20157254 detected !!! [**]
@@ -171,7 +159,7 @@ public class SSHConnectSnort	{
 				if (line.contains("detect")) {
 					hited = true;
 				}
-				
+		
 				for (String key : rd.getMap().keySet()) {
 					if (line.contains(key)) {
 						ruleKey = key;
@@ -180,25 +168,21 @@ public class SSHConnectSnort	{
 				}
 			}
 			
-			
 			System.out.println("hited " + hited);
 			System.out.println("ruleKey " + ruleKey);
-			
 			
 			if (!hited) {
 				alert = " * Final Result: NOT HIT \n"
 					  + " * Rule Name: N/A \n"
 					  + " * Comment from NewSky: N/A "; 
-			} else {
-								
+			} else {					
 				alert = " * Final Result: HIT \n"
 					  + " * Rule Name: " + (ruleKey == null ? "[Hit but comment NOT included in \"snortplus.txt\" yet]" 
 							  								 : ruleKey) + "\n"
 					  + " * Comment from NewSky: " 
 					  					+  (ruleKey == null ? "[Not available yet]" 
 					  					                    	 : rd.getCommentByRule(ruleKey)); 
-			}
-				
+			}	
 			br.close();
 		} catch (SftpException | IOException e) {
 			e.printStackTrace();
@@ -259,7 +243,7 @@ public class SSHConnectSnort	{
 		if (command.toLowerCase().contains("sudo -i")) {
 			env = "> root@VPN3:~# ";
 		}
-		System.out.println("\n --- run --- ");  				// run command
+		System.out.println("\n --- run --- ");
 		System.out.println(env + command);
 		StringBuilder outputBuffer = new StringBuilder();
 		try {
@@ -282,20 +266,3 @@ public class SSHConnectSnort	{
 		return outputBuffer.toString();
 	} 
 }
-
-
-
-
-
-
-/*	
-public static void main(String args[]) throws JSchException, FileNotFoundException {
-	init(); 		 												 // initial SSH	
-	getAlertResult("7254.pcap", "20157254.rule", "7254.pcap", "20157254.rule");
-//	getAlertResult("1111.pcap", "20157254.rule", "/Users/aaron/Downloads/1111.pcap"
-//												"/Users/aaron/Downloads/20157254.rule");	
-}
-*/
-
-
-
